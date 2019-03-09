@@ -82,7 +82,10 @@ class CodeWriter {
 
     // labelコマンド
     func writeLabel(label: String) {
-
+        guard let writeURL = writeURL else { fatalError("writeURL error.") }
+        let labelCommand = LabelCommand(label: label)
+        let asm = labelCommand.convert()
+        write(url: writeURL, text: "\(asm)\n")
     }
 
     // gotoコマンド
