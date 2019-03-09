@@ -29,28 +29,32 @@ func main(path: String) {
             case .C_LABEL:
                 print("ラベル")
                 print(" - " + parser.arg1())
+                codeWriter.writeLabel(label: parser.arg1())
             case .C_GOTO:
                 print("ゴー")
                 print(" - " + parser.arg1())
+                codeWriter.writeGoto(label: parser.arg1())
             case .C_IF:
                 print("条件分岐")
                 print(" - " + parser.arg1())
+                codeWriter.writeIf(label: parser.arg1())
             case .C_FUNCTION:
                 print("関数")
                 print(" - " + parser.arg1())
                 print(" - " + String(parser.arg2()))
+                codeWriter.writeFunction(functionName: parser.arg1(), numLocals: parser.arg2())
             case .C_RETURN:
                 print("リターン")
+                codeWriter.writeReturn()
             case .C_CALL:
                 print("コール")
                 print(" - " + parser.arg1())
                 print(" - " + String(parser.arg2()))
+                codeWriter.writeCall(functionName: parser.arg1(), numArgs: parser.arg2())
             }
         }
     }
 }
-
-
 
 if CommandLine.arguments.count == 2  {
     main(path: CommandLine.arguments[1])

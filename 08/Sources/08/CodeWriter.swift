@@ -75,6 +75,43 @@ class CodeWriter {
         }
     }
 
+    // VMの初期化
+    func writeInit() {
+
+    }
+
+    // labelコマンド
+    func writeLabel(label: String) {
+
+    }
+
+    // gotoコマンド
+    func writeGoto(label: String) {
+
+    }
+
+    // if-gotoコマンド
+    func writeIf(label: String) {
+
+    }
+
+    // callコマンド
+    func writeCall(functionName: String, numArgs: Int) {
+
+    }
+
+    // returnコマンド
+    func writeReturn() {
+
+    }
+
+    // functionコマンド
+    func writeFunction(functionName: String, numLocals: Int) {
+
+    }
+
+
+
     func close() {
 
     }
