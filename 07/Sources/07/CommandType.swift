@@ -1,4 +1,4 @@
-enum CommandPushPopType {
+enum CommandPushPopType{
     case push
     case pop
 }

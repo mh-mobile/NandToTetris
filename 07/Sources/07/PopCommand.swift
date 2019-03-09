@@ -18,9 +18,18 @@ extension PopCommand: Command {
             case .constant:
                 fatalError("no segment for pop")
             case .pointer:
-              asm = """
-                     // push pointer \(index)
-                     """
+               guard let pointerType = SegmentPointerType(rawValue: index) else { 
+                    fatalError("index fatal error.") 
+                }
+
+                asm = """
+                      // pop pointer \(index)
+                      @SP
+                      AM=M-1
+                      D=M
+                      @\(pointerType.symbol)
+                      M=D
+                      """
             case .temp:
               asm = """
                      // push temp \(index)

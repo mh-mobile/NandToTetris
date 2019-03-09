@@ -29,8 +29,19 @@ extension PushCommand: Command {
                       M=M+1
                       """
             case .pointer:
+                guard let pointerType = SegmentPointerType(rawValue: index) else { 
+                    fatalError("index fatal error.") 
+                }
+
                 asm = """
                       // push pointer \(index)
+                      @\(pointerType.symbol)
+                      D=M
+                      @SP
+                      A=M
+                      M=D
+                      @SP
+                      M=M+1
                       """
  
             case .temp:

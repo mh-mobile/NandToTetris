@@ -30,3 +30,17 @@ enum SegmentType: String {
     case that
     case s_static
 }
+
+enum SegmentPointerType: Int {
+    var symbol: String {
+        switch self {
+            case .this:
+                return SegmentType.this.symbol
+            case .that:
+                return SegmentType.that.symbol
+        }
+    }
+
+    case this 
+    case that
+}
