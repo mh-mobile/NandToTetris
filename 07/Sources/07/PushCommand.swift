@@ -29,17 +29,42 @@ extension PushCommand: Command {
                       M=M+1
                       """
             case .pointer:
-                asm = "pointer asm"
+                asm = """
+                      // push pointer \(index)
+                      """
+ 
             case .temp:
-                asm = "temp asm"
-            case .local:
-                asm = "local asm"
-            case .argument:
-                asm = "argument asm"
-            case .this:
-                asm = "this asm"
-            case .that:
-                asm = "that asm"
+              asm = """
+                     // push temp \(index)
+                     @R\(index+5)
+                     D=M
+                     @SP
+                     A=M
+                     M=D
+                     @SP
+                     M=M+1
+                     """
+  
+            case .local, .argument, .this, .that:
+               asm = """
+                     // push \(segment.rawValue) \(index)
+                     @\(index)
+                     D=A
+                     @\(segment.symbol)
+                     A=M
+                     A=D+A
+                     D=M
+                     @SP
+                     A=M
+                     M=D
+                     @SP
+                     M=M+1
+                     """
+            case .s_static:
+                asm = """
+                      // push static \(index)
+                      """
+  
         }
 
         return asm

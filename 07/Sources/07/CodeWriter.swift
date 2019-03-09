@@ -67,7 +67,8 @@ class CodeWriter {
                 let pushCommand = PushCommand(segment: segment, index: index)
                 write(url: writeURL, text: "\(pushCommand.convert())\n")
             case .pop:
-                write(url: writeURL, text: "hello pop!\n")
+                let popCommand = PopCommand(segment: segment, index: index)
+                write(url: writeURL, text: "\(popCommand.convert())\n")
         }
     }
 
