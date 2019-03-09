@@ -18,7 +18,9 @@ class CodeWriter {
         guard let arithmeticType = CommandArithmeticType(rawValue: command) else { fatalError("arithmetic type error.") }
         switch arithmeticType {
             case .add:
-                write(url: writeURL, text: "\(command)\n")
+                let addCommand = AddCommand()
+                let asm = addCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
             case .sub:
                 write(url: writeURL, text: "\(command)\n")
             case .neg:
@@ -42,7 +44,8 @@ class CodeWriter {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
         switch command {
             case .push:
-                write(url: writeURL, text: "hello push!\n")
+                let pushCommand = PushCommand(segment: segment, index: index)
+                write(url: writeURL, text: "\(pushCommand.convert())\n")
             case .pop:
                 write(url: writeURL, text: "hello pop!\n")
         }
