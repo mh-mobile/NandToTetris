@@ -2,6 +2,7 @@ import Foundation
 
 class CodeWriter {
     var writeURL: URL?
+    var ifCommandIndex = 1
 
     public init() {
 
@@ -30,11 +31,20 @@ class CodeWriter {
                 let asm = negCommand.convert()
                 write(url: writeURL, text: "\(asm)\n")
             case .eq:
-                write(url: writeURL, text: "\(command)\n")
+                let eqCommand = EqCommand(index: ifCommandIndex)
+                let asm = eqCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
+                ifCommandIndex += 1
             case .gt:
-                break
+                let gtCommand = GtCommand(index: ifCommandIndex)
+                let asm = gtCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
+                ifCommandIndex += 1
             case .lt:
-                break
+                let ltCommand = LtCommand(index: ifCommandIndex)
+                let asm = ltCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
+                ifCommandIndex += 1
             case .and:
                 let andCommand = AndCommand()
                 let asm = andCommand.convert()
