@@ -1,11 +1,13 @@
 class PopCommand {
     let segment: SegmentType
     let index: Int
+    let vmFileName: String
 
-    init(segment: String, index: Int) {
+    init(segment: String, index: Int, vmFileName: String) {
         guard let segment = SegmentType(rawValue: segment) else { fatalError("convert segment error") }
         self.segment = segment
         self.index = index
+        self.vmFileName = vmFileName
     }
 
 }
@@ -60,10 +62,15 @@ extension PopCommand: Command {
                      A=M
                      M=D
                      """
-            case .s_static:
+            case .`static`:
                 asm = """
-                     // push static \(index)
-                """
+                      // push static \(index)
+                      @SP
+                      AM=M-1
+                      D=M
+                      @\(vmFileName).\(index)
+                      M=D
+                      """
         }
 
         return asm

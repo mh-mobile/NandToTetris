@@ -3,11 +3,13 @@ import Foundation
 class PushCommand {
     let segment: SegmentType
     let index: Int
+    let vmFileName: String
 
-    init(segment: String, index: Int) {
+    init(segment: String, index: Int, vmFileName: String) {
         guard let segment = SegmentType(rawValue: segment) else { fatalError("convert segment error") }
         self.segment = segment
         self.index = index
+        self.vmFileName = vmFileName
     }
 
 }
@@ -71,9 +73,16 @@ extension PushCommand: Command {
                      @SP
                      M=M+1
                      """
-            case .s_static:
+            case .`static`:
                 asm = """
                       // push static \(index)
+                      @\(vmFileName).\(index)
+                      D=M
+                      @SP
+                      A=M
+                      M=D
+                      @SP
+                      M=M+1
                       """
   
         }

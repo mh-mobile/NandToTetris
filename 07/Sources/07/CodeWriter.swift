@@ -3,6 +3,7 @@ import Foundation
 class CodeWriter {
     var writeURL: URL?
     var ifCommandIndex = 1
+    var vmFileName: String = ""
 
     public init() {
 
@@ -12,6 +13,8 @@ class CodeWriter {
         writeURL = URL(fileURLWithPath: fileName)
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
         removeFile(fileURL: writeURL)
+        let vmFilePath = (writeURL.absoluteString as NSString).deletingPathExtension
+        vmFileName = (vmFilePath as NSString).lastPathComponent
     }
 
     func writeArithmetic(command: String) {
@@ -64,10 +67,10 @@ class CodeWriter {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
         switch command {
             case .push:
-                let pushCommand = PushCommand(segment: segment, index: index)
+                let pushCommand = PushCommand(segment: segment, index: index, vmFileName: vmFileName)
                 write(url: writeURL, text: "\(pushCommand.convert())\n")
             case .pop:
-                let popCommand = PopCommand(segment: segment, index: index)
+                let popCommand = PopCommand(segment: segment, index: index, vmFileName: vmFileName)
                 write(url: writeURL, text: "\(popCommand.convert())\n")
         }
     }

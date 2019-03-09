@@ -16,7 +16,7 @@ enum SegmentType: String {
                 return "THIS"
             case .that:
                 return "THAT"
-            case .s_static:
+            case .`static`:
                 return ""
         }
     }
@@ -28,7 +28,7 @@ enum SegmentType: String {
     case argument
     case this
     case that
-    case s_static
+    case `static`
 }
 
 enum SegmentPointerType: Int {
