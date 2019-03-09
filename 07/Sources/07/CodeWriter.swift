@@ -34,11 +34,17 @@ class CodeWriter {
             case .lt:
                 break
             case .and:
-                break
+                let andCommand = AndCommand()
+                let asm = andCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
             case .or:
-                break
+                let orCommand = OrCommand()
+                let asm = orCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
             case .not:
-                break
+                let notCommand = NotCommand()
+                let asm = notCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
         }
     }
 
