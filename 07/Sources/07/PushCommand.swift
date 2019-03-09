@@ -18,7 +18,16 @@ extension PushCommand: Command {
         let asm: String
         switch segment {
             case .constant:
-                asm = "constant asm"
+                asm = """
+                      // push constant \(index)
+                      @\(index)
+                      D=A
+                      @SP
+                      A=M
+                      M=D
+                      @SP
+                      M=M+1
+                      """
             case .pointer:
                 asm = "pointer asm"
             case .temp:
