@@ -1,4 +1,4 @@
-class AddCommand {
+class SubCommand {
 
     init() {
 
@@ -6,18 +6,18 @@ class AddCommand {
 
 }
 
-extension AddCommand: Command {
+extension SubCommand: Command {
 
     func convert() -> String {
         let asm: String 
         asm = """
-        // add
+        // sub
         @SP
         AM=M-1
         D=M
         @SP
         AM=M-1
-        M=D+M
+        M=M-D
         @SP
         M=M+1
         """

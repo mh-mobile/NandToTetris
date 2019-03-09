@@ -22,7 +22,9 @@ class CodeWriter {
                 let asm = addCommand.convert()
                 write(url: writeURL, text: "\(asm)\n")
             case .sub:
-                write(url: writeURL, text: "\(command)\n")
+                let subCommand = SubCommand()
+                let asm = subCommand.convert()
+                write(url: writeURL, text: "\(asm)\n")
             case .neg:
                 break
             case .eq:
