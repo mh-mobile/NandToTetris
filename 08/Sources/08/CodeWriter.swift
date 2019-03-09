@@ -95,7 +95,10 @@ class CodeWriter {
 
     // if-gotoコマンド
     func writeIf(label: String) {
-
+        guard let writeURL = writeURL else { fatalError("writeURL error.") }
+        let ifGotoCommand = IfGotoCommand(label: label)
+        let asm = ifGotoCommand.convert()
+        write(url: writeURL, text: "\(asm)\n")
     }
 
     // callコマンド
