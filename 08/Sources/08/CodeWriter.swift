@@ -111,12 +111,18 @@ class CodeWriter {
 
     // returnコマンド
     func writeReturn() {
-
+        guard let writeURL = writeURL else { fatalError("writeURL error.") }
+        let returnCommand = ReturnCommand()
+        let asm = returnCommand.convert()
+        write(url: writeURL, text: "\(asm)\n")
     }
 
     // functionコマンド
     func writeFunction(functionName: String, numLocals: Int) {
-
+        guard let writeURL = writeURL else { fatalError("writeURL error.") }
+        let functionCommand = FunctionCommand(functionName: functionName, numLocals: numLocals)
+        let asm = functionCommand.convert()
+        write(url: writeURL, text: "\(asm)\n")
     }
 
 
