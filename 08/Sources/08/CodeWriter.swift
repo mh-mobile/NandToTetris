@@ -106,7 +106,10 @@ class CodeWriter {
 
     // callコマンド
     func writeCall(functionName: String, numArgs: Int) {
-
+        guard let writeURL = writeURL else { fatalError("writeURL error.") }
+        let callCommand = CallCommand(functionName: functionName, numArgs: numArgs)
+        let asm = callCommand.convert()
+        write(url: writeURL, text: "\(asm)\n")
     }
 
     // returnコマンド
