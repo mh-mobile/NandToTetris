@@ -1,28 +1,29 @@
 import Foundation
 
-
 class Parser {
     var commands = [String]()
     var pos = -1
 
-    init(path: String) {
-        if let text = try? String(contentsOfFile: path) {
-            let array = text.components(separatedBy: "\n")
-            for (_, data) in array.enumerated() {
-                let componentsByComments = data.components(separatedBy: "//")
-                guard componentsByComments.count > 0 else {
-                    continue
+    init(paths: [String]) {
+        commands.append("call Sys.init 0")
+        paths.forEach {
+            if let text = try? String(contentsOfFile: $0) {
+                let array = text.components(separatedBy: "\n")
+                for (_, data) in array.enumerated() {
+                    let componentsByComments = data.components(separatedBy: "//")
+                    guard componentsByComments.count > 0 else {
+                        continue
+                    }
+                    let trim = componentsByComments[0].trimmingCharacters(in: .whitespacesAndNewlines)
+                    if trim == "" {
+                        continue
+                    }
+                    commands.append(trim)
                 }
-                let trim = componentsByComments[0].trimmingCharacters(in: .whitespacesAndNewlines)
-                if trim == "" {
-                    continue
-                }
-                commands.append(trim)
+            } else {
+                print("no file path")
             }
-        } else {
-            print("no file path")
         }
-
     }
 
     func hasMoreCommands() -> Bool {

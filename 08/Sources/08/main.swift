@@ -1,9 +1,50 @@
 import Foundation
 
+func isDirectory(path: String) -> Bool {
+    let fileManager = FileManager.default
+    var isDir:ObjCBool = false
+    if fileManager.fileExists(atPath: path, isDirectory: &isDir)  {
+        if isDir.boolValue {
+            return true
+        }
+    }
+
+    return false
+}
+
+func vmFiles(dirPath: String) -> [String] {
+    let fileManager = FileManager.default
+    do {
+        let list = try fileManager.contentsOfDirectory(atPath: dirPath)
+        let vmList = list.filter {
+            let name = $0 as NSString
+            return name.pathExtension == "vm"
+        }
+        let vmFilePaths: [String] = vmList.map { vmFileName in 
+            let dirPath = (dirPath as NSString).deletingPathExtension
+            return "\(dirPath)/\(vmFileName)"
+        }
+        return vmFilePaths
+    } catch {
+        fatalError("directory get errro.")
+    }
+    return []
+}
+
 func main(path: String) {
     let pathPrefix = (path as NSString).deletingPathExtension
-    let writeFileName = "\(pathPrefix).asm"
-    let parser = Parser(path: path)
+    let writeFileName: String
+
+    var vmPaths = [String]()
+    if isDirectory(path: path) {
+        vmPaths.append(contentsOf: vmFiles(dirPath: path))
+        writeFileName = "\(pathPrefix)/Main.asm" 
+    } else {
+        vmPaths = [path]
+        writeFileName = "\(pathPrefix).asm"
+    }
+
+    let parser = Parser(paths: vmPaths)
     let codeWriter = CodeWriter()
     codeWriter.setFileName(fileName: writeFileName)
 
