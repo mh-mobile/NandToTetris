@@ -15,7 +15,7 @@ extension CallCommand: Command {
     func convert() -> String {
         let asm = """
                   // call
-                  @\(functionName)#return-address
+                  @\(functionName)$return-address
                   D=A
                   @SP
                   A=M
@@ -74,9 +74,9 @@ extension CallCommand: Command {
                   M=D
 
                   @\(functionName)
-                  0;JPM
+                  0;JMP
                   
-                  (\(functionName)#return-address)
+                  (\(functionName)$return-address)
                   """
         return asm
     }

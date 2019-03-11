@@ -38,7 +38,8 @@ func main(path: String) {
     var vmPaths = [String]()
     if isDirectory(path: path) {
         vmPaths.append(contentsOf: vmFiles(dirPath: path))
-        writeFileName = "\(pathPrefix)/Main.asm" 
+        let dirname = (path as NSString).lastPathComponent
+        writeFileName = "\(pathPrefix)/\(dirname).asm" 
     } else {
         vmPaths = [path]
         writeFileName = "\(pathPrefix).asm"
