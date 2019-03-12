@@ -93,6 +93,9 @@ func main(path: String) {
                 print(" - " + parser.arg1())
                 print(" - " + String(parser.arg2()))
                 codeWriter.writeCall(functionName: parser.arg1(), numArgs: parser.arg2())
+            case .C_BOOTSTRAP:
+                print("ブートストラップ")
+                codeWriter.writeBootstrap()
             }
         }
     }

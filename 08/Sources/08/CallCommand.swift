@@ -57,20 +57,14 @@ extension CallCommand: Command {
 
                   @SP
                   D=M
-                  @LCL
+                  @\(numArgs + 5)
+                  D=D-A
+                  @ARG
                   M=D
 
-                  @5
-                  D=A
+                  @SP
+                  D=M
                   @LCL
-                  D=M-D
-                  @R13
-                  M=D
-                  @\(numArgs)
-                  D=A
-                  @R13
-                  D=M-D
-                  @ARG
                   M=D
 
                   @\(functionName)

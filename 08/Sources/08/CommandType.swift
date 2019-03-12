@@ -13,6 +13,7 @@ enum CommandType {
     case C_FUNCTION
     case C_RETURN
     case C_CALL
+    case C_BOOTSTRAP
 }
 
 enum CommandArithmeticType: String {

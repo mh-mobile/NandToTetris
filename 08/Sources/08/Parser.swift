@@ -4,8 +4,10 @@ class Parser {
     var commands = [String]()
     var pos = -1
 
+
+
     init(paths: [String]) {
-        commands.append("call Sys.init 0")
+        commands.append("bootstrap")
         paths.forEach {
             if let text = try? String(contentsOfFile: $0) {
                 let array = text.components(separatedBy: "\n")
@@ -77,6 +79,8 @@ class Parser {
             return .C_CALL
         case "return":
             return .C_RETURN
+        case "bootstrap":
+            return .C_BOOTSTRAP
         default:
             fatalError("(\(commandData.label)): unkown command error.")
         }

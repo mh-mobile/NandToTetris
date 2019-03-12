@@ -112,6 +112,23 @@ class CodeWriter {
         write(url: writeURL, text: "\(asm)\n")
     }
 
+    // bootstrapコマンド
+    func writeBootstrap() {
+        guard let writeURL = writeURL else { fatalError("writeURL error.") }
+        let callCommand = CallCommand(functionName: "Sys.init", numArgs: 0)
+        let bootstrapAsm = """
+                           @256
+                           D=A
+                           @SP
+                           M=D
+                           """
+        let asm = """
+                  \(bootstrapAsm) 
+                  \(callCommand.convert())
+                  """
+        write(url: writeURL, text: "\(asm)\n")
+    }
+
     // returnコマンド
     func writeReturn() {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
