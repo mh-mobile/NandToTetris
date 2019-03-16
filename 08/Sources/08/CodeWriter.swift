@@ -4,17 +4,18 @@ class CodeWriter {
     var writeURL: URL?
     var ifCommandIndex = 1
     var vmFileName: String = ""
+    var asmFileName: String = ""
 
-    public init() {
-
-    }
-
-    func setFileName(fileName: String) {
+    public init(fileName: String) {
         writeURL = URL(fileURLWithPath: fileName)
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
         removeFile(fileURL: writeURL)
-        let vmFilePath = (writeURL.absoluteString as NSString).deletingPathExtension
-        vmFileName = (vmFilePath as NSString).lastPathComponent
+        let asmFilePath = (writeURL.absoluteString as NSString).deletingPathExtension
+        asmFileName = (asmFilePath as NSString).lastPathComponent
+    }
+
+    func setFileName(fileName: String) {
+        vmFileName = fileName
     }
 
     func writeArithmetic(command: String, functionName: String?) {

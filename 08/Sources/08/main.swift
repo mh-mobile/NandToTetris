@@ -48,12 +48,12 @@ func main(path: String) {
     }
 
     let parser = Parser(paths: vmPaths)
-    let codeWriter = CodeWriter()
-    codeWriter.setFileName(fileName: writeFileName)
+    let codeWriter = CodeWriter(fileName: writeFileName)
 
     do {
         while parser.hasMoreCommands() {
             parser.advance()
+            codeWriter.setFileName(fileName: parser.vmFileName())
             let commandType = parser.commandType()
             switch commandType {
             case .C_ARITHMETRIC:

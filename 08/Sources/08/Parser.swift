@@ -2,6 +2,7 @@ import Foundation
 
 class Parser {
     var commands = [String]()
+    var vmFileForCommands = [Int: String]()
     var pos = -1
 
 
@@ -9,6 +10,10 @@ class Parser {
     init(paths: [String]) {
         commands.append("bootstrap")
         paths.forEach {
+
+            var vmFileName = String(($0 as NSString).lastPathComponent)
+            vmFileName = String((vmFileName as NSString).deletingPathExtension)
+
             if let text = try? String(contentsOfFile: $0) {
                 let array = text.components(separatedBy: "\n")
                 for (_, data) in array.enumerated() {
@@ -21,6 +26,7 @@ class Parser {
                         continue
                     }
                     commands.append(trim)
+                    vmFileForCommands[commands.count-1] = vmFileName
                 }
             } else {
                 print("no file path")
@@ -34,6 +40,10 @@ class Parser {
 
     func advance() {
         pos += 1
+    }
+
+    func vmFileName() -> String {
+        return vmFileForCommands[pos] ?? ""
     }
 
     private func commandDatas() -> (label: String, arg1: String?, arg2: Int?) {
