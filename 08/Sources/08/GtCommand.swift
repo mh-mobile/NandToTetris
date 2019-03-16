@@ -1,9 +1,11 @@
 class GtCommand {
 
     let index: Int
+    let functionName: String?
 
-    init(index: Int) {
+    init(index: Int, functionName: String?) {
         self.index = index
+        self.functionName = functionName
     }
 
 
@@ -12,6 +14,17 @@ class GtCommand {
 extension GtCommand: Command {
 
     func convert() -> String {
+        var convertedName: (String) -> String = { label in
+            if let functionName = self.functionName {
+                return "\(functionName)$\(label)"
+            } else {
+                return label
+            }
+        }
+
+        let trueIndex = convertedName("TRUE\(index)")
+        let endIndex = convertedName("END\(index)")
+
         let asm: String 
         asm = """
         // eq
@@ -21,18 +34,18 @@ extension GtCommand: Command {
         @SP
         AM=M-1
         D=M-D
-        @TRUE\(index)
+        @\(trueIndex)
         D;JGT
         @SP
         A=M
         M=0
-        @END\(index)
+        @\(endIndex)
         0;JMP
-        (TRUE\(index))
+        (\(trueIndex))
         @SP
         A=M
         M=-1
-        (END\(index))
+        (\(endIndex))
         @SP
         M=M+1
         """

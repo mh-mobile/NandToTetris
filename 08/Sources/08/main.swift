@@ -35,6 +35,8 @@ func main(path: String) {
     let pathPrefix = (path as NSString).deletingPathExtension
     let writeFileName: String
 
+    var currentFunctionName: String?
+
     var vmPaths = [String]()
     if isDirectory(path: path) {
         vmPaths.append(contentsOf: vmFiles(dirPath: path))
@@ -56,7 +58,7 @@ func main(path: String) {
             switch commandType {
             case .C_ARITHMETRIC:
                 print("算術演算: \(parser.label())")
-                codeWriter.writeArithmetic(command: parser.label())
+                codeWriter.writeArithmetic(command: parser.label(), functionName: currentFunctionName)
             case .C_PUSH:
                 print("プッシュ")
                 print(" - " + parser.arg1())
@@ -71,22 +73,24 @@ func main(path: String) {
             case .C_LABEL:
                 print("ラベル")
                 print(" - " + parser.arg1())
-                codeWriter.writeLabel(label: parser.arg1())
+                codeWriter.writeLabel(label: parser.arg1(), functionName: currentFunctionName)
             case .C_GOTO:
                 print("ゴー")
                 print(" - " + parser.arg1())
-                codeWriter.writeGoto(label: parser.arg1())
+                codeWriter.writeGoto(label: parser.arg1(), functionName: currentFunctionName)
             case .C_IF:
                 print("条件分岐")
                 print(" - " + parser.arg1())
-                codeWriter.writeIf(label: parser.arg1())
+                codeWriter.writeIf(label: parser.arg1(), functionName: currentFunctionName)
             case .C_FUNCTION:
                 print("関数")
                 print(" - " + parser.arg1())
                 print(" - " + String(parser.arg2()))
+                currentFunctionName = parser.arg1()
                 codeWriter.writeFunction(functionName: parser.arg1(), numLocals: parser.arg2())
             case .C_RETURN:
                 print("リターン")
+                // currentFunctionName = nil
                 codeWriter.writeReturn()
             case .C_CALL:
                 print("コール")

@@ -1,6 +1,9 @@
 import Foundation
 
 class CallCommand {
+
+    public static var returnIndex: Int = 0
+
     let functionName: String
     let numArgs: Int
 
@@ -11,11 +14,14 @@ class CallCommand {
 }
 
 extension CallCommand: Command {
-
     func convert() -> String {
+
+        CallCommand.returnIndex += 1
+        let returnAddress: String = "\(functionName)$return-address\(CallCommand.returnIndex)"
+
         let asm = """
                   // call
-                  @\(functionName)$return-address
+                  @\(returnAddress)
                   D=A
                   @SP
                   A=M
@@ -70,7 +76,7 @@ extension CallCommand: Command {
                   @\(functionName)
                   0;JMP
                   
-                  (\(functionName)$return-address)
+                  (\(returnAddress))
                   """
         return asm
     }

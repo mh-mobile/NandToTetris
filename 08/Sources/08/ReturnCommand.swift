@@ -13,53 +13,71 @@ extension ReturnCommand: Command {
     func convert() -> String {
         let asm = """
                   // return
+
+                  // copy the return address
+                  @LCL
+                  D=M
+                  @5
+                  A=D-A
+                  D=M
+                  @R14
+                  M=D
+
                   @SP
-                  AM=M-1
+                  M=M-1
+                  A=M
                   D=M
                   @ARG
                   A=M
                   M=D
-                  D=A
+
+                  // SP
+                  @ARG
+                  D=M+1
                   @SP
-                  M=D+1
-                  @LCL
-                  D=M
-                  @R13
                   M=D
 
+                  // THAT (LCL - 1)
+                  @LCL
+                  D=M
                   @1
                   A=D-A
                   D=M
                   @THAT
                   M=D
-                  @R13
+
+                  // THIS (LCL - 2)
+                  @LCL
                   D=M
                   @2
                   A=D-A
                   D=M
                   @THIS
                   M=D
-                  @R13
+
+                  // ARG (LCL - 3)
+                  @LCL
                   D=M
                   @3
                   A=D-A
                   D=M
                   @ARG
                   M=D
-                  @R13
+
+                  // LCL (LCL - 4)
+                  @LCL
                   D=M
                   @4
                   A=D-A
                   D=M
                   @LCL
                   M=D
-                  @R13
-                  D=M
-                  @5
-                  A=D-A
+
+                  @R14 
                   A=M
                   0;JMP
                   """
+
         return asm
     }
 

@@ -17,49 +17,49 @@ class CodeWriter {
         vmFileName = (vmFilePath as NSString).lastPathComponent
     }
 
-    func writeArithmetic(command: String) {
+    func writeArithmetic(command: String, functionName: String?) {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
         guard let arithmeticType = CommandArithmeticType(rawValue: command) else { fatalError("arithmetic type error.") }
         switch arithmeticType {
             case .add:
                 let addCommand = AddCommand()
                 let asm = addCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
             case .sub:
                 let subCommand = SubCommand()
                 let asm = subCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
             case .neg:
                 let negCommand = NegCommand()
                 let asm = negCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
             case .eq:
-                let eqCommand = EqCommand(index: ifCommandIndex)
+                let eqCommand = EqCommand(index: ifCommandIndex, functionName: functionName)
                 let asm = eqCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
                 ifCommandIndex += 1
             case .gt:
-                let gtCommand = GtCommand(index: ifCommandIndex)
+                let gtCommand = GtCommand(index: ifCommandIndex, functionName: functionName)
                 let asm = gtCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
                 ifCommandIndex += 1
             case .lt:
-                let ltCommand = LtCommand(index: ifCommandIndex)
+                let ltCommand = LtCommand(index: ifCommandIndex, functionName: functionName)
                 let asm = ltCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
                 ifCommandIndex += 1
             case .and:
                 let andCommand = AndCommand()
                 let asm = andCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
             case .or:
                 let orCommand = OrCommand()
                 let asm = orCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
             case .not:
                 let notCommand = NotCommand()
                 let asm = notCommand.convert()
-                write(url: writeURL, text: "\(asm)\n")
+                write(url: writeURL, text: "\(asm)\n\n")
         }
     }
 
@@ -68,10 +68,10 @@ class CodeWriter {
         switch command {
             case .push:
                 let pushCommand = PushCommand(segment: segment, index: index, vmFileName: vmFileName)
-                write(url: writeURL, text: "\(pushCommand.convert())\n")
+                write(url: writeURL, text: "\(pushCommand.convert())\n\n")
             case .pop:
                 let popCommand = PopCommand(segment: segment, index: index, vmFileName: vmFileName)
-                write(url: writeURL, text: "\(popCommand.convert())\n")
+                write(url: writeURL, text: "\(popCommand.convert())\n\n")
         }
     }
 
@@ -81,27 +81,27 @@ class CodeWriter {
     }
 
     // labelコマンド
-    func writeLabel(label: String) {
+    func writeLabel(label: String, functionName: String?) {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
-        let labelCommand = LabelCommand(label: label)
+        let labelCommand = LabelCommand(label: label, functionName: functionName)
         let asm = labelCommand.convert()
-        write(url: writeURL, text: "\(asm)\n")
+        write(url: writeURL, text: "\(asm)\n\n")
     }
 
     // gotoコマンド
-    func writeGoto(label: String) {
+    func writeGoto(label: String, functionName: String?) {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
-        let gotoCommand = GotoCommand(label: label)
+        let gotoCommand = GotoCommand(label: label, functionName: functionName)
         let asm = gotoCommand.convert()
-        write(url: writeURL, text: "\(asm)\n")
+        write(url: writeURL, text: "\(asm)\n\n")
     }
 
     // if-gotoコマンド
-    func writeIf(label: String) {
+    func writeIf(label: String, functionName: String?) {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
-        let ifGotoCommand = IfGotoCommand(label: label)
+        let ifGotoCommand = IfGotoCommand(label: label, functionName: functionName)
         let asm = ifGotoCommand.convert()
-        write(url: writeURL, text: "\(asm)\n")
+        write(url: writeURL, text: "\(asm)\n\n")
     }
 
     // callコマンド
@@ -109,7 +109,7 @@ class CodeWriter {
         guard let writeURL = writeURL else { fatalError("writeURL error.") }
         let callCommand = CallCommand(functionName: functionName, numArgs: numArgs)
         let asm = callCommand.convert()
-        write(url: writeURL, text: "\(asm)\n")
+        write(url: writeURL, text: "\(asm)\n\n")
     }
 
     // bootstrapコマンド
@@ -121,12 +121,13 @@ class CodeWriter {
                            D=A
                            @SP
                            M=D
+
                            """
         let asm = """
                   \(bootstrapAsm) 
                   \(callCommand.convert())
                   """
-        write(url: writeURL, text: "\(asm)\n")
+        write(url: writeURL, text: "\(asm)\n\n")
     }
 
     // returnコマンド

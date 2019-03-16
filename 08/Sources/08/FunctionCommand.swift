@@ -13,33 +13,25 @@ class FunctionCommand {
 extension FunctionCommand: Command {
 
     func convert() -> String {
+
+        var lines = [String]()
+        for i in 0..<numLocals {
+           let line = """
+                      @SP
+                      A=M
+                      M=0
+                      @SP
+                      M=M+1
+                      """
+            lines.append(line)
+        }
+
+        let localAsm = lines.count == 0 ? "" : lines.joined(separator: "\n")
+
         let asm = """
                   // function
                   (\(functionName))
-                  @R13
-                  M=0
-                  (\(functionName)_INIT)
-                  @R13
-                  D=M
-                  @\(numLocals)
-                  D=D-A
-                  @\(functionName)_INIT_START
-                  D;JLT
-                  @\(functionName)_INIT_END
-                  0;JMP
-                  (\(functionName)_INIT_START)
-                  @0
-                  D=A
-                  @SP
-                  A=M
-                  M=D
-                  @SP
-                  M=M+1
-                  @R13
-                  M=M+1
-                  @\(functionName)_INIT
-                  0;JMP
-                  (\(functionName)_INIT_END)
+                  \(localAsm)
                   """
         return asm
     }
