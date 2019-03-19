@@ -1,7 +1,8 @@
 class JackTokenizer {
+    let source: String
 
-    init() {
-
+    init(source: String) {
+        self.source = source
     }    
 
     func hasMoreToken() -> Bool {
